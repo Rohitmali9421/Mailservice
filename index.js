@@ -8,10 +8,10 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/send-location", async (req, res) => {
-    const { latitude, longitude } = req.body;
-    console.log(latitude, longitude)
-    if (!latitude || !longitude) {
-        return res.status(400).json({ error: "Invalid location data" });
+    const { latitude, longitude, email } = req.body;
+
+    if (!latitude || !longitude || !email) {
+        return res.status(400).json({ error: "Invalid request. Latitude, longitude, and email are required." });
     }
 
     const locationLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
@@ -25,16 +25,19 @@ app.post("/send-location", async (req, res) => {
     });
 
     let mailOptions = {
-        from: process.env.EMAIL,
-        to: "rsm9421@gmail.com",  
+        from: `"Location Tracker" <${process.env.EMAIL}>`, // Custom sender name
+        to: email,  // Dynamic email from request body
         subject: "Live Location",
         text: `Hey, here is the current location: ${locationLink}`,
+        html: `<p>Hey, here is the current location:</p>
+               <p><a href="${locationLink}">${locationLink}</a></p>`
     };
 
     try {
         await transporter.sendMail(mailOptions);
-        res.json({ message: "Email sent successfully!" });
+        res.json({ message: `Email sent successfully to ${email}!` });
     } catch (error) {
+        console.error("Error sending email:", error);
         res.status(500).json({ error: "Failed to send email" });
     }
 });
