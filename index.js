@@ -29,7 +29,7 @@ app.post("/send-location", async (req, res) => {
         to: email,  // Dynamic email from request body
         subject: "Live Location",
         text: `Hey, here is the current location: ${locationLink}`,
-        html: `<p>Hey, here is the current location:</p>
+        html: `<p>Hey, here is the current location:  </p>
                <p><a href="${locationLink}">${locationLink}</a></p>`
     };
 
