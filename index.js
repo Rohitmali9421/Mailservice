@@ -27,10 +27,13 @@ app.post("/send-location", async (req, res) => {
     let mailOptions = {
         from: `"Location Tracker" <${process.env.EMAIL}>`, // Custom sender name
         to: email,  // Dynamic email from request body
-        subject: "Live Location",
-        text: `Hey, here is the current location: ${locationLink}`,
-        html: `<p>Hey, here is the current location:  </p>
-               <p><a href="${locationLink}">${locationLink}</a></p>`
+        subject: "Emergency Alert: Live Location Update",
+        text: `Urgent! The current location has been shared for safety purposes: ${locationLink}`,
+        html: `<p><strong>Emergency Alert:</strong></p>
+       <p>The live location has been shared for safety purposes.</p>
+       <p><strong>Location:</strong> <a href="${locationLink}">${locationLink}</a></p>
+       <p>Please take necessary action if needed.</p>`
+
     };
 
     try {
